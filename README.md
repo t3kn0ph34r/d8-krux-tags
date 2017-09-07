@@ -5,7 +5,7 @@ This module is designed to add Krux Tags (http://www.krux.com) to the site.
 Default values for distribution can be placed in: config/install/krux_tags.settings.yml 
 and config/schema/krux_tags.schema.yml
 
-The configuration screen is `admin/config/krux_tags` or via the modules 
+The configuration screen is under Search and Metadata `admin/config/search/krux_tags` or via the modules 
 screen under "Configuration" at the Krux Tags module.
 
 After setting the values, the tag will display in the "page_bottom" region. 
