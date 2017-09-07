@@ -1,0 +1,5 @@
+krux_tags.configuration_form:
+  route_name: krux_tags.configuration_form
+  title: 'Krux Tags Configuration'
+  description: 'Configure the Krux Tags module'
+  parent: system.admin_config_search

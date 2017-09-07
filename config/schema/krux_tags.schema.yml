@@ -1,0 +1,10 @@
+krux_tags.settings:
+  type: mapping
+  label: Settings
+  mapping:
+    krux_tags_data_id:
+      type: string
+    krux_tags_script_uri:
+      type: string
+    krux_tags_site_name:
+      type: string

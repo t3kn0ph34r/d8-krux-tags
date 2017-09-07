@@ -1,0 +1,58 @@
+<?php
+
+/**
+ * @file
+ * Code for Krux tag.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function krux_tags_menu() {
+  $items = array();
+
+  $items['admin/config/krux_tags'] = array(
+    'title' => 'Krux Tags Configuration',
+    'description' => 'Configure the Krux Tags module',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('krux_tags_configuration_form'),
+    'access arguments' => array('administer site configuration'),
+    'type' => MENU_NORMAL_ITEM,
+    'file' => 'krux_tags.admin.inc',
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_process_html().
+ */
+function krux_tags_process_html(&$vars) {
+  $uri = \Drupal::config('krux_tags.settings')->get('krux_tags_script_uri');
+  $data_id = \Drupal::config('krux_tags.settings')->get('krux_tags_data_id');
+  $site_name = \Drupal::config('krux_tags.settings')->get('krux_tags_site_name');
+
+  if (!empty($uri) && !empty($data_id) && !empty($site_name) && !path_is_admin(\Drupal\Core\Url::fromRoute("<current>")->toString())) {
+    $js = <<<'JAVASCRIPT'
+<!-- BEGIN Krux ControlTag for "@site_name" -->
+<script class="kxct" data-id="@data_id" data-timing="async" data-version="3.0" type="text/javascript">window.Krux||((Krux=function(){Krux.q.push(arguments)}).q=[]),function(){var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src=("https:"===location.protocol?"https:":"http:")+"@uri";var e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(t,e)}();</script>
+<!-- END Krux ControlTag -->
+<script>window.Krux||((Krux=function(){Krux.q.push(arguments)}).q=[]),function(){function e(e){var o,n="kximmediate_"+e;return window.localStorage?window.localStorage[n]||"":navigator.cookieEnabled?(o=document.cookie.match(n+"=([^;]*)"))&&unescape(o[1])||"":""}Krux.user=e("user"),Krux.segments=e("segs")&&e("segs").split(",")||[]}();</script>
+JAVASCRIPT;
+
+    // Replace the site name and URI place holders with values.
+    $js = format_string($js, array(
+      '@uri' => $uri,
+      '@data_id' => $data_id,
+      '@site_name' => $site_name,
+    ));
+
+    // Add the JS to the scripts array in the header.
+    $script = array(
+      'type' => 'markup',
+      '#markup' => $js,
+    );
+
+    $vars['scripts'] .= \Drupal::service("renderer")->render($script);
+  }
+}

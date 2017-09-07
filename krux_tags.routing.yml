@@ -1,0 +1,9 @@
+krux_tags.configuration_form:
+  path: /admin/config/search/krux_tags
+  defaults:
+    _title: 'Krux Tags Configuration'
+    _form: \Drupal\krux_tags\Form\KruxTagsConfigurationForm
+  requirements:
+    _permission: 'administer site configuration'
+  options:
+    _admin_route: TRUE
